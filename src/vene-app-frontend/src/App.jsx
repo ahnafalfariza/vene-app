@@ -1,30 +1,24 @@
-import { useState } from "react";
-import { vene_app_backend } from "declarations/vene-app-backend";
+import { Routes, Route } from "react-router";
+
+import Home from "./pages/Home";
+import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 
 function App() {
-  const [greeting, setGreeting] = useState("");
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    vene_app_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
-
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-        <p className="font-bold text-5xl">Mantap jiwaaa</p>
-      </form>
-      <section id="greeting">{greeting}</section>
+    <main className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-grow">
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="about" element={<p>About</p>} />
+          <Route path="discover" element={<p>Discover</p>} />
+          <Route path="create" element={<p>Create</p>} />
+          <Route path="event/:eventid" element={<p>Event</p>} />
+          <Route path="profile/:profileId" element={<p>Profile</p>} />
+        </Routes>
+      </div>
+      <Footer />
     </main>
   );
 }
