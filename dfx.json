@@ -15,13 +15,13 @@
       "main": "src/vene-app-backend/main.mo",
       "type": "motoko"
     },
+    "vene-app-user-service": {
+      "main": "src/vene-app-backend/user.mo",
+      "type": "motoko"
+    },
     "vene-app-frontend": {
-      "dependencies": [
-        "vene-app-backend"
-      ],
-      "source": [
-        "src/vene-app-frontend/dist"
-      ],
+      "dependencies": ["vene-app-backend"],
+      "source": ["src/vene-app-frontend/dist"],
       "type": "assets",
       "workspace": "vene-app-frontend"
     }
