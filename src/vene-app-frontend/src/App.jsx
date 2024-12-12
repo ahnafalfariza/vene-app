@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { vene_app_backend } from 'declarations/vene-app-backend';
+import { useState } from "react";
+import { vene_app_backend } from "declarations/vene-app-backend";
 
 function App() {
-  const [greeting, setGreeting] = useState('');
+  const [greeting, setGreeting] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -22,6 +22,7 @@ function App() {
         <label htmlFor="name">Enter your name: &nbsp;</label>
         <input id="name" alt="Name" type="text" />
         <button type="submit">Click Me!</button>
+        <p className="font-bold text-5xl">Mantap jiwaaa</p>
       </form>
       <section id="greeting">{greeting}</section>
     </main>
