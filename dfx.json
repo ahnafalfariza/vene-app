@@ -1,0 +1,37 @@
+{
+  "canisters": {
+    "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "frontend": {},
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    },
+    "vene-app-backend": {
+      "main": "src/vene-app-backend/main.mo",
+      "type": "motoko"
+    },
+    "vene-app-frontend": {
+      "dependencies": [
+        "vene-app-backend"
+      ],
+      "source": [
+        "src/vene-app-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "vene-app-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
