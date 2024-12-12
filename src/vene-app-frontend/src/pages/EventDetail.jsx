@@ -15,7 +15,7 @@ const EventDetail = () => {
         </div>
       </div>
 
-      <div className="rounded-lg overflow-hidden mb-8">
+      <div className="rounded-xl overflow-hidden mb-8">
         <img
           src="https://picsum.photos/1201/900"
           alt="Event cover"

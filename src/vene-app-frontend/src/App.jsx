@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import EventDetail from "./pages/EventDetail";
+import EventCategoryLocation from "./pages/EventCategoryLocation";
 
 function App() {
   return (
@@ -16,6 +17,10 @@ function App() {
           <Route path="discover" element={<p>Discover</p>} />
           <Route path="create" element={<p>Create</p>} />
           <Route path="event/:eventid" element={<EventDetail />} />
+          <Route
+            path="location/:locationId"
+            element={<EventCategoryLocation />}
+          />
           <Route path="profile/:profileId" element={<p>Profile</p>} />
         </Routes>
       </div>

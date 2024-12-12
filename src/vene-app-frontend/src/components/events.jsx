@@ -84,7 +84,7 @@ const EventItem = ({ event }) => {
         <img
           src={event.image}
           alt={event.title}
-          className="w-full h-60 object-cover rounded-2xl"
+          className="w-full h-auto object-cover rounded-2xl aspect-[4/3]"
         />
         <div className="absolute top-4 left-4 bg-white rounded-lg px-3 py-1 text-center">
           <div className="text-xs font-semibold">{event.date.month}</div>
