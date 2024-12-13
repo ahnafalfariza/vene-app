@@ -1,4 +1,6 @@
 import { MapPin } from "lucide-react";
+import { Link } from "react-router";
+import { formatEventUrl } from "../utils/common";
 
 const EventList = () => {
   const events = [
@@ -79,7 +81,10 @@ const EventList = () => {
 
 const EventItem = ({ event }) => {
   return (
-    <div className="overflow-hidden">
+    <Link
+      to={formatEventUrl(event.title, event.id)}
+      className="overflow-hidden"
+    >
       <div className="relative">
         <img
           src={event.image}
@@ -113,7 +118,7 @@ const EventItem = ({ event }) => {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

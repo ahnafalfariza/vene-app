@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "../components/ui/button";
 import {
   Palette,
@@ -6,6 +7,7 @@ import {
   Users,
   Volleyball,
 } from "lucide-react";
+import { useLocation, useNavigate } from "react-router";
 
 const CategoryData = [
   {
@@ -36,18 +38,40 @@ const CategoryData = [
 ];
 
 const Category = () => {
+  const [activeCategory, setActiveCategory] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const onClickCategory = (_category) => {
+    const nextCategory = _category === activeCategory ? "" : _category;
+    setActiveCategory(nextCategory);
+
+    navigate(nextCategory ? `/?filter=${nextCategory}` : "");
+  };
+
   return (
     <div className="flex gap-4">
       {CategoryData.map((cat) => (
-        <CategoryItem key={cat.id} icon={cat.icon} text={cat.text} />
+        <CategoryItem
+          key={cat.id}
+          id={cat.id}
+          icon={cat.icon}
+          text={cat.text}
+          activeCategory={activeCategory}
+          onClickCategory={onClickCategory}
+        />
       ))}
     </div>
   );
 };
 
-const CategoryItem = ({ text, icon }) => {
+const CategoryItem = ({ text, id, icon, onClickCategory, activeCategory }) => {
   return (
-    <Button variant="ghost" className="rounded-full bg-[#F0F0F0]">
+    <Button
+      onClick={() => onClickCategory(id)}
+      variant={activeCategory === id ? "default" : "custom"}
+      className="rounded-full"
+    >
       {icon}
       <p>{text}</p>
     </Button>

@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { generateLocalEventImage } from "../utils/common";
 
 const LocalEventData = [
@@ -11,9 +12,13 @@ const LocalEventData = [
 
 const LocalEvent = () => {
   return (
-    <a className="grid grid-cols-4 gap-6">
+    <div className="grid grid-cols-4 gap-6">
       {LocalEventData.map((loc) => (
-        <div className="flex items-center gap-3" key={loc}>
+        <Link
+          to={`/location/${loc.toLowerCase()}`}
+          className="flex items-center gap-3"
+          key={loc}
+        >
           <img
             className="h-20 w-20 rounded-xl"
             src={generateLocalEventImage(loc)}
@@ -22,9 +27,9 @@ const LocalEvent = () => {
             <p className="font-semibold">{loc}</p>
             <p className="text-xs text-black/80">{loc.length} events</p>
           </div>
-        </div>
+        </Link>
       ))}
-    </a>
+    </div>
   );
 };
 
