@@ -5,6 +5,7 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import EventDetail from "./pages/EventDetail";
 import EventCategoryLocation from "./pages/EventCategoryLocation";
+import CreateEvent from "./pages/CreateEvent";
 
 function App() {
   return (
@@ -14,8 +15,8 @@ function App() {
         <Routes>
           <Route index element={<Home />} />
           <Route path="about" element={<p>About</p>} />
-          <Route path="discover" element={<p>Discover</p>} />
-          <Route path="create" element={<p>Create</p>} />
+          <Route path="discover" element={<Home />} />
+          <Route path="create" element={<CreateEvent />} />
           <Route path="event/:eventid" element={<EventDetail />} />
           <Route
             path="location/:locationId"
