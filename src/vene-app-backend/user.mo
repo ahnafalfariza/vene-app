@@ -2,6 +2,7 @@ import Time "mo:base/Time";
 import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
 import Option "mo:base/Option";
+import Iter "mo:base/Iter";
 
 actor UserProfile {
   type User = {
@@ -24,6 +25,10 @@ actor UserProfile {
 
     users.put(caller, updatedUser);
     return true;
+  };
+
+  public query func getAllUsers() : async [(Principal, User)] {
+    Iter.toArray(users.entries());
   };
 
   public query func getProfile(userId : Principal) : async ?User {

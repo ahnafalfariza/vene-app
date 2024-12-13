@@ -43,9 +43,9 @@ actor EventManagement {
     #attended;
   };
 
-  private let userProfileCanister : actor {
-    userExists : (Principal) -> async Bool;
-  } = actor ("PRINCIPAL-OF-USER-CANISTER");
+  // private let userProfileCanister : actor {
+  //   userExists : (Principal) -> async Bool;
+  // } = actor ("bw4dl-smaaa-aaaaa-qaacq-cai");
 
   private stable var eventIdCounter : Nat = 0;
   private let events = HashMap.HashMap<Text, Event>(0, Text.equal, Text.hash);
@@ -60,10 +60,10 @@ actor EventManagement {
     registrationDeadline : Time.Time,
   ) : async Result.Result<Text, Text> {
     try {
-      let userExists = await userProfileCanister.userExists(msg.caller);
-      if (not userExists) {
-        return #err("User profile not found");
-      };
+      // let userExists = await userProfileCanister.userExists(msg.caller);
+      // if (not userExists) {
+      //   return #err("User profile not found");
+      // };
 
       eventIdCounter += 1;
       let eventId = Int.toText(eventIdCounter);
@@ -91,10 +91,10 @@ actor EventManagement {
   // Register for event
   public shared (msg) func registerForEvent(eventId : Text) : async Result.Result<Bool, Text> {
     try {
-      let userExists = await userProfileCanister.userExists(msg.caller);
-      if (not userExists) {
-        return #err("User profile not found");
-      };
+      // let userExists = await userProfileCanister.userExists(msg.caller);
+      // if (not userExists) {
+      //   return #err("User profile not found");
+      // };
 
       switch (events.get(eventId)) {
         case (null) { #err("Event not found") };

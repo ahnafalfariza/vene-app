@@ -20,7 +20,7 @@
       "type": "motoko"
     },
     "vene-app-frontend": {
-      "dependencies": ["vene-app-backend"],
+      "dependencies": ["vene-app-backend", "vene-app-user-service"],
       "source": ["src/vene-app-frontend/dist"],
       "type": "assets",
       "workspace": "vene-app-frontend"
