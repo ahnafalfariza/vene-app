@@ -1,4 +1,6 @@
 import { Routes, Route } from "react-router";
+import { initSatellite } from "@junobuild/core";
+import { useEffect } from "react";
 
 import Home from "./pages/Home";
 import Navbar from "./components/navbar";
@@ -8,6 +10,15 @@ import EventCategoryLocation from "./pages/EventCategoryLocation";
 import CreateEvent from "./pages/CreateEvent";
 
 function App() {
+  useEffect(() => {
+    (async () =>
+      await initSatellite({
+        workers: {
+          auth: true,
+        },
+      }))();
+  }, []);
+
   return (
     <main className="min-h-screen flex flex-col">
       <Navbar />

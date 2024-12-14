@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from "url";
 import react from "@vitejs/plugin-react";
+import juno from "@junobuild/vite-plugin";
 import { defineConfig } from "vite";
 import environment from "vite-plugin-environment";
 import dotenv from "dotenv";
@@ -29,6 +30,9 @@ export default defineConfig({
     react(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),
+    juno({
+      container: true,
+    }),
   ],
   resolve: {
     alias: [
