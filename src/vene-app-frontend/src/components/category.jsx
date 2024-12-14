@@ -50,7 +50,7 @@ const Category = () => {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 flex-wrap">
       {CategoryData.map((cat) => (
         <CategoryItem
           key={cat.id}
