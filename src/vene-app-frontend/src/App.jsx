@@ -8,6 +8,7 @@ import Footer from "./components/footer";
 import EventDetail from "./pages/EventDetail";
 import EventCategoryLocation from "./pages/EventCategoryLocation";
 import CreateEvent from "./pages/CreateEvent";
+import MyEvent from "./pages/MyEvent";
 import { AuthContextProvider } from "./components/auth";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
               path="location/:locationId"
               element={<EventCategoryLocation />}
             />
+            <Route path="my-event" element={<MyEvent />} />
             <Route path="profile/:profileId" element={<p>Profile</p>} />
           </Routes>
         </div>
