@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 import { Link } from "react-router";
-import { formatEventUrl } from "../utils/common";
+import { formatEventUrl, generateAvatarImage } from "../utils/common";
 
 const EventList = () => {
   const events = [
@@ -104,12 +104,19 @@ const EventItem = ({ event }) => {
         </div>
         <div className="flex items-center">
           <div className="flex -space-x-2">
+            {/* Dummy user */}
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
                 className="w-6 h-6 rounded-full border-2 border-white bg-gray-200"
               >
-                {/* Avatar images would go here */}
+                <img
+                  src={generateAvatarImage(
+                    Math.random().toString(36).substring(7)
+                  )}
+                  alt="Avatar"
+                  className="w-full h-full rounded-full"
+                />
               </div>
             ))}
           </div>
