@@ -16,24 +16,24 @@ const Footer = () => {
           </div>
           {/* Add social media icons */}
           <div className="flex gap-6 mb-4 md:mb-0">
-            <a href="#" className="hover:text-gray-300">
+            <a href="#" className="">
               <Facebook size={20} />
             </a>
-            <a href="#" className="hover:text-gray-300">
+            <a href="#" className="">
               <Twitter size={20} />
             </a>
-            <a href="#" className="hover:text-gray-300">
+            <a href="#" className="">
               <Instagram size={20} />
             </a>
-            <a href="#" className="hover:text-gray-300">
+            <a href="#" className="">
               <Linkedin size={20} />
             </a>
           </div>
           <div className="flex gap-4 text-sm">
-            <Link to="#" className="hover:text-gray-300">
+            <Link to="#" className="">
               About
             </Link>
-            <Link to="/privacy" className="hover:text-gray-300">
+            <Link to="/privacy" className="">
               Privacy Policy
             </Link>
           </div>
