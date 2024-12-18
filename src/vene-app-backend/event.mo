@@ -12,14 +12,36 @@ actor EventManagement {
   type Event = {
     id : Text;
     creator : Principal;
-    title : Text;
+    eventName : Text;
     description : Text;
-    venue : Text;
+    location : Text;
+    category : Text;
+    coverPhoto : Text;
     eventDate : Time.Time;
+    eventTime : Text;
+    ticketType : TicketType;
+    ticketPrice : ?Float;
     maxParticipants : Nat;
     registrationDeadline : Time.Time;
     status : EventStatus;
     createdAt : Time.Time;
+  };
+
+  type PaymentDetails = {
+    amount : Float;
+    tokenType : TokenType;
+    transactionId : Text;
+  };
+
+  type TokenType = {
+    #ICP;
+    #ICRC1;
+    // Add other token types as needed
+  };
+
+  type TicketType = {
+    #free;
+    #paid;
   };
 
   type Registration = {
@@ -27,6 +49,7 @@ actor EventManagement {
     eventId : Text;
     status : RegistrationStatus;
     registrationDate : Time.Time;
+    payment : ?PaymentDetails;
   };
 
   type EventStatus = {
@@ -52,10 +75,15 @@ actor EventManagement {
   private let registrations = HashMap.HashMap<Text, [Registration]>(0, Text.equal, Text.hash);
 
   public shared (msg) func createEvent(
-    title : Text,
+    eventName : Text,
     description : Text,
-    venue : Text,
+    location : Text,
+    category : Text,
+    coverPhoto : Text,
     eventDate : Time.Time,
+    eventTime : Text,
+    ticketType : TicketType,
+    ticketPrice : ?Float,
     maxParticipants : Nat,
     registrationDeadline : Time.Time,
   ) : async Result.Result<Text, Text> {
@@ -65,16 +93,37 @@ actor EventManagement {
       //   return #err("User profile not found");
       // };
 
+      switch (ticketType) {
+        case (#paid) {
+          switch (ticketPrice) {
+            case (null) {
+              return #err("Ticket price is required for paid events");
+            };
+            case (?price) {
+              if (price < 0) {
+                return #err("Ticket price must be non-negative");
+              };
+            };
+          };
+        };
+        case (#free) {};
+      };
+
       eventIdCounter += 1;
       let eventId = Int.toText(eventIdCounter);
 
       let newEvent : Event = {
         id = eventId;
         creator = msg.caller;
-        title = title;
+        eventName = eventName;
         description = description;
-        venue = venue;
+        location = location;
+        category = category;
+        coverPhoto = coverPhoto;
         eventDate = eventDate;
+        eventTime = eventTime;
+        ticketType = ticketType;
+        ticketPrice = ticketPrice;
         maxParticipants = maxParticipants;
         registrationDeadline = registrationDeadline;
         status = #upcoming;
@@ -108,6 +157,7 @@ actor EventManagement {
             eventId = eventId;
             status = #pending;
             registrationDate = Time.now();
+            payment = null;
           };
 
           switch (registrations.get(eventId)) {
@@ -186,6 +236,7 @@ actor EventManagement {
                     eventId = reg.eventId;
                     status = #confirmed;
                     registrationDate = reg.registrationDate;
+                    payment = null;
                   };
                 };
                 reg;
