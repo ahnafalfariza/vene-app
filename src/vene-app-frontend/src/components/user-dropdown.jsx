@@ -11,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router";
+import EditProfileDialog from "./edit-profile-dialog";
 
 const UserDropdownMenu = () => {
   const { user } = useAuth();
@@ -28,14 +30,13 @@ const UserDropdownMenu = () => {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <User />
-              <span>Edit Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Ticket />
-              <span>My Events</span>
-            </DropdownMenuItem>
+            <EditProfileDialog />
+            <Link to="/my-event">
+              <DropdownMenuItem>
+                <Ticket />
+                <span>My Events</span>
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuItem onClick={signOut}>
               <LogOut />
               <span>Sign out</span>
