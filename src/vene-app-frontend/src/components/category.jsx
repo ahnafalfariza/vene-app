@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 
-const CategoryData = [
+export const CategoryData = [
   {
     id: "arts-and-culture",
     text: "Arts & Culture",

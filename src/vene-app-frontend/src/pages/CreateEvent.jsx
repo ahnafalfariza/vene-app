@@ -21,6 +21,7 @@ import {
 import { format } from "date-fns";
 import { CalendarIcon, CalendarCheck, Clock } from "lucide-react";
 import clsx from "clsx";
+import { CategoryData } from "../components/category";
 
 const eventSchema = z.object({
   coverPhoto: z
@@ -267,10 +268,11 @@ const CreateEvent = () => {
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="music">Music</SelectItem>
-                        <SelectItem value="sports">Sports</SelectItem>
-                        <SelectItem value="art">Art</SelectItem>
-                        <SelectItem value="food">Food</SelectItem>
+                        {CategoryData.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.text}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   )}
