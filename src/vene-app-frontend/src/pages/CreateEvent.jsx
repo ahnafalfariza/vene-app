@@ -22,6 +22,8 @@ import { format } from "date-fns";
 import { CalendarIcon, CalendarCheck, Clock } from "lucide-react";
 import clsx from "clsx";
 import { CategoryData } from "../components/category";
+import { uploadFile } from "@junobuild/core";
+import { useAuth } from "../components/auth";
 
 const eventSchema = z.object({
   coverPhoto: z
@@ -63,6 +65,8 @@ const eventSchema = z.object({
 });
 
 const CreateEvent = () => {
+  const { user } = useAuth();
+
   const {
     control,
     register,
@@ -84,8 +88,17 @@ const CreateEvent = () => {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("Form submitted:", data);
+
+    const filename = `${user.key}-${data.coverPhoto.name}`;
+    const { downloadUrl } = await uploadFile({
+      collection: "image",
+      data: data.coverPhoto,
+      filename,
+    });
+
+    const url = downloadUrl;
   };
 
   const ticketType = watch("ticketType");
