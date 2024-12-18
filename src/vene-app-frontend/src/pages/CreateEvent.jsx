@@ -45,6 +45,20 @@ const eventSchema = z.object({
     .string()
     .min(3, "Location must be at least 3 characters")
     .max(200, "Location must not exceed 200 characters"),
+  ticketType: z.enum(["free", "paid"], {
+    required_error: "Please select a ticket type",
+  }),
+  ticketPrice: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const number = parseFloat(val);
+        return !isNaN(number) && number >= 0;
+      },
+      { message: "Please enter a valid price" }
+    ),
 });
 
 const CreateEvent = () => {
@@ -64,12 +78,16 @@ const CreateEvent = () => {
       date: "",
       time: "",
       location: "",
+      ticketType: "",
+      ticketPrice: "",
     },
   });
 
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
   };
+
+  const ticketType = watch("ticketType");
 
   return (
     <div className="flex-grow container w-full m-auto p-4 py-12">
@@ -90,7 +108,7 @@ const CreateEvent = () => {
                 name="coverPhoto"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <div className="mt-2 relative h-64 bg-muted rounded-lg flex items-center justify-center">
+                  <div className="mt-2 relative aspect-[2/1] w-full bg-muted rounded-lg flex items-center justify-center">
                     {value && (
                       <img
                         src={URL.createObjectURL(value)}
@@ -281,8 +299,61 @@ const CreateEvent = () => {
                   </p>
                 )}
               </div>
+              <div>
+                <Label htmlFor="ticketType">Ticket Type</Label>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Specify if your event is free or paid
+                </p>
+                <Controller
+                  name="ticketType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select ticket type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="free">Free</SelectItem>
+                        <SelectItem value="paid">Paid</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.ticketType && (
+                  <p className="text-xs text-destructive mt-1.5">
+                    {errors.ticketType.message}
+                  </p>
+                )}
+              </div>
+
+              {ticketType === "paid" && (
+                <div>
+                  <Label htmlFor="ticketPrice">Ticket Price</Label>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Set the price for your event tickets
+                  </p>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2">
+                      $
+                    </span>
+                    <Input
+                      {...register("ticketPrice")}
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0.00"
+                      className="pl-7"
+                    />
+                  </div>
+                  {errors.ticketPrice && (
+                    <p className="text-xs text-destructive mt-1.5">
+                      {errors.ticketPrice.message}
+                    </p>
+                  )}
+                </div>
+              )}
               <div className="mt-8">
-                <Button type="submit" className="float-right w-full">
+                <Button type="submit" className="float-right">
                   <CalendarCheck />
                   Create Event
                 </Button>
