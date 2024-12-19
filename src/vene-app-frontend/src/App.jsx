@@ -31,7 +31,7 @@ function App() {
             <Route path="about" element={<p>About</p>} />
             <Route path="discover" element={<Home />} />
             <Route path="create" element={<CreateEvent />} />
-            <Route path="event/:eventid" element={<EventDetail />} />
+            <Route path="event/:eventId" element={<EventDetail />} />
             <Route
               path="location/:locationId"
               element={<EventCategoryLocation />}
