@@ -213,6 +213,28 @@ actor EventManagement {
     };
   };
 
+  public query (msg) func isRegisteredForEvent(eventId : Text) : async Result.Result<Bool, Text> {
+    switch (events.get(eventId)) {
+      case (null) { #err("Event not found") };
+      case (?_event) {
+        switch (registrations.get(eventId)) {
+          case (null) { #ok(false) };
+          case (?regs) {
+            let reg = Array.find<Registration>(
+              regs,
+              func(reg) {
+                reg.userId == msg.caller;
+              },
+            );
+            switch (reg) {
+              case (null) { #ok(false) };
+              case (?_reg) { #ok(true) };
+            };
+          };
+        };
+      };
+    };
+  };
   public shared (msg) func approveRegistration(eventId : Text, userId : Principal) : async Result.Result<Bool, Text> {
     switch (events.get(eventId)) {
       case (null) { #err("Event not found") };

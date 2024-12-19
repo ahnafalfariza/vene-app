@@ -46,3 +46,11 @@ export const getEventParticipants = async (eventId) => {
   const res = await vene_app_backend.getEventParticipants(eventId);
   return res;
 };
+
+export const isRegisteredForEvent = async (eventId) => {
+  const res = await vene_app_backend.isRegisteredForEvent(eventId);
+  if (res.ok) {
+    return true;
+  }
+  return false;
+};
