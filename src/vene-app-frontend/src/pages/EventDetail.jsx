@@ -17,6 +17,8 @@ import { useParams } from "react-router";
 import { useAuth } from "../components/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import QRCodeDialog from "../components/qrcode-dialog";
+import { generateCalendarLink } from "../utils/common";
 
 const EventDetail = () => {
   const params = useParams();
@@ -25,6 +27,7 @@ const EventDetail = () => {
   const { toast } = useToast();
 
   const [isRegistering, setIsRegistering] = useState(false);
+  const [showQRCode, setShowQRCode] = useState(false);
 
   const {
     data: event,
@@ -159,14 +162,36 @@ const EventDetail = () => {
                   Add to calendar and see your ticket below
                 </p>
                 <div className="flex gap-3">
-                  <Button className="grow">
+                  <Button className="grow" onClick={() => setShowQRCode(true)}>
                     <ScanQrCode />
                     My Ticket
                   </Button>
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      window.open(
+                        generateCalendarLink({
+                          name: event.eventName,
+                          description: event.description,
+                          location: event.location,
+                          eventDate: date,
+                        }),
+                        "_blank"
+                      )
+                    }
+                  >
                     <CalendarPlus />
                   </Button>
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      toast({
+                        title: "Link copied",
+                        description: "Event link copied to clipboard",
+                      });
+                    }}
+                  >
                     <Share />
                   </Button>
                 </div>
@@ -187,6 +212,11 @@ const EventDetail = () => {
                 </Button>
               </div>
             )}
+            <QRCodeDialog
+              showQRCode={showQRCode}
+              setShowQRCode={setShowQRCode}
+              eventId={eventId}
+            />
           </div>
         </div>
       </div>

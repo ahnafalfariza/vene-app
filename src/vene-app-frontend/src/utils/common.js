@@ -10,5 +10,27 @@ export const formatEventUrl = (title, id) => {
   return `/event/${title.toLowerCase().replace(/\s+/g, "-")}-${id}`;
 };
 
+export const generateCalendarLink = ({
+  name,
+  eventDate,
+  description,
+  location,
+}) => {
+  const formatToGoogleCalendar = (date) => {
+    return date
+      .toISOString()
+      .replaceAll("-", "")
+      .replaceAll(":", "")
+      .replace(".000", "");
+  };
+
+  const endDate = new Date(eventDate.getTime() + 60 * 60 * 1000);
+  const formattedDates = `${formatToGoogleCalendar(
+    eventDate
+  )}/${formatToGoogleCalendar(endDate)}`;
+
+  return `https://calendar.google.com/calendar/u/0/r/eventedit?text=${name}&dates=${formattedDates}&details=${description}&location=${location}`;
+};
+
 export const capitalize = (s) =>
   s && String(s[0]).toUpperCase() + String(s).slice(1);

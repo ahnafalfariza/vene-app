@@ -6,6 +6,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useState } from "react";
+import QRCodeDialog from "../components/qrcode-dialog";
+import { generateCalendarLink } from "../utils/common";
 
 const MyEvent = () => {
   const events = [
@@ -30,6 +33,7 @@ const MyEvent = () => {
     },
     // Add more events as needed
   ];
+  const [showQRCode, setShowQRCode] = useState(false);
 
   return (
     <div className="min-h-screen p-8">
@@ -88,7 +92,10 @@ const MyEvent = () => {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          <Button variant="secondary">
+                          <Button
+                            variant="secondary"
+                            onClick={() => setShowQRCode(true)}
+                          >
                             <ScanQrCode />
                           </Button>
                         </TooltipTrigger>
@@ -101,7 +108,20 @@ const MyEvent = () => {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          <Button variant="outline">
+                          <Button
+                            onClick={() =>
+                              window.open(
+                                generateCalendarLink({
+                                  name: event.eventName,
+                                  description: event.description,
+                                  location: event.location,
+                                  eventDate: date,
+                                }),
+                                "_blank"
+                              )
+                            }
+                            variant="outline"
+                          >
                             <CalendarPlus />
                           </Button>
                         </TooltipTrigger>
@@ -124,6 +144,11 @@ const MyEvent = () => {
               </div>
             </div>
           ))}
+          <QRCodeDialog
+            showQRCode={showQRCode}
+            setShowQRCode={setShowQRCode}
+            eventId={null} //temporarily set to null
+          />
         </div>
       </div>
     </div>
