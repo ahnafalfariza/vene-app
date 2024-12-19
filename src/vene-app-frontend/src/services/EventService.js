@@ -33,7 +33,7 @@ export const registerEvent = async (eventId) => {
 };
 
 export const getEvents = async (skip = 0, limit = 10) => {
-  const res = await vene_app_backend.getAllEvents(skip, limita);
+  const res = await vene_app_backend.getAllEvents(skip, limit);
   return res;
 };
 
