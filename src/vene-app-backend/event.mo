@@ -213,6 +213,34 @@ actor EventManagement {
     };
   };
 
+  public query func getEventsByCategory(category : Text, offset : Nat, limit : Nat) : async {
+    events : [Event];
+    total : Nat;
+  } {
+    let filteredEvents = Iter.toArray(
+      Iter.filter(
+        events.vals(),
+        func(event : Event) : Bool {
+          event.category == category;
+        },
+      )
+    );
+
+    let total = filteredEvents.size();
+    let start = if (offset >= total) { total } else { offset };
+    let end = if (start + limit > total) { total } else { start + limit };
+
+    let paginatedEvents = Array.tabulate<Event>(
+      end - start,
+      func(i) { filteredEvents[start + i] },
+    );
+
+    {
+      events = paginatedEvents;
+      total = total;
+    };
+  };
+
   public query (msg) func isRegisteredForEvent(eventId : Text) : async Result.Result<Bool, Text> {
     switch (events.get(eventId)) {
       case (null) { #err("Event not found") };
