@@ -3,23 +3,34 @@ import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
 import Option "mo:base/Option";
 import Iter "mo:base/Iter";
+import Text "mo:base/Text";
 
 actor UserProfile {
   type User = {
     email : Text;
     fullName : Text;
-    phone : Text;
+    avatar : Text;
+    bio : Text;
+    headline : Text;
     createdAt : Time.Time;
   };
 
   private let users = HashMap.HashMap<Principal, User>(0, Principal.equal, Principal.hash);
 
-  public shared (msg) func updateProfile(email : Text, fullName : Text, phone : Text) : async Bool {
+  public shared (msg) func updateProfile(
+    email : Text,
+    fullName : Text,
+    avatar : Text,
+    bio : Text,
+    headline : Text,
+  ) : async Bool {
     let caller = msg.caller;
     let updatedUser : User = {
       email = email;
       fullName = fullName;
-      phone = phone;
+      avatar = avatar;
+      bio = bio;
+      headline = headline;
       createdAt = Time.now();
     };
 
