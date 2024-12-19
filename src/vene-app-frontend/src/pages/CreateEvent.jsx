@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Select,
   SelectContent,
@@ -19,12 +20,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, CalendarCheck, Clock } from "lucide-react";
+import { CalendarIcon, CalendarCheck, Clock, Loader2 } from "lucide-react";
 import clsx from "clsx";
 import { CategoryData } from "../components/category";
 import { uploadFile } from "@junobuild/core";
 import { useAuth } from "../components/auth";
 import { createEvent } from "../services/EventService";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { formatEventUrl } from "../utils/common";
 
 const eventSchema = z.object({
   coverPhoto: z
@@ -66,7 +71,10 @@ const eventSchema = z.object({
 });
 
 const CreateEvent = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const {
     control,
@@ -90,35 +98,60 @@ const CreateEvent = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log("Form submitted:", data);
+    try {
+      console.log("Form submitted:", data);
+      setIsSubmitting(true);
 
-    const filename = `${user.key}-${data.coverPhoto.name}`;
-    const { downloadUrl } = await uploadFile({
-      collection: "image",
-      data: data.coverPhoto,
-      filename,
-    });
-    const url = downloadUrl;
+      const filename = `${user.key}-${data.coverPhoto.name}`;
+      const { downloadUrl } = await uploadFile({
+        collection: "image",
+        data: data.coverPhoto,
+        filename,
+      });
+      const url = downloadUrl;
 
-    const date = new Date(data.date);
-    const time = data.time.split(":");
-    date.setHours(time[0], time[1]);
+      const date = new Date(data.date);
+      const time = data.time.split(":");
+      date.setHours(time[0], time[1]);
 
-    const isoDate = date.getTime() * 1000000;
+      const isoDate = date.getTime() * 1000000;
 
-    const res = await createEvent({
-      category: data.category,
-      coverPhoto: url,
-      description: data.description,
-      eventName: data.eventName,
-      location: data.location,
-      eventDate: isoDate,
-      ticketType: data.ticketType,
-      ticketPrice: data.ticketPrice,
-      maxParticipants: 100,
-    });
+      const res = await createEvent({
+        category: data.category,
+        coverPhoto: url,
+        description: data.description,
+        eventName: data.eventName,
+        location: data.location,
+        eventDate: isoDate,
+        ticketType: data.ticketType,
+        ticketPrice: data.ticketPrice,
+        maxParticipants: 100,
+      });
 
-    console.log("Event created:", res);
+      console.log("Event created:", res);
+
+      toast({
+        title: "Success!",
+        description: "Your event has been created successfully.",
+        action: (
+          <ToastAction
+            altText="Goto schedule to event page"
+            onClick={() => navigate(formatEventUrl(data.eventName, res.ok))}
+          >
+            Go to page
+          </ToastAction>
+        ),
+      });
+    } catch (error) {
+      console.error("Error creating event:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create event. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const ticketType = watch("ticketType");
@@ -388,9 +421,22 @@ const CreateEvent = () => {
                 </div>
               )}
               <div className="mt-8">
-                <Button type="submit" className="float-right">
-                  <CalendarCheck />
-                  Create Event
+                <Button
+                  type="submit"
+                  className="float-right"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <CalendarCheck className="mr-2 h-4 w-4" />
+                      Create Event
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
