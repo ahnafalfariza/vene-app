@@ -24,6 +24,7 @@ import clsx from "clsx";
 import { CategoryData } from "../components/category";
 import { uploadFile } from "@junobuild/core";
 import { useAuth } from "../components/auth";
+import { createEvent } from "../services/EventService";
 
 const eventSchema = z.object({
   coverPhoto: z
@@ -97,8 +98,27 @@ const CreateEvent = () => {
       data: data.coverPhoto,
       filename,
     });
-
     const url = downloadUrl;
+
+    const date = new Date(data.date);
+    const time = data.time.split(":");
+    date.setHours(time[0], time[1]);
+
+    const isoDate = date.getTime() * 1000000;
+
+    const res = await createEvent({
+      category: data.category,
+      coverPhoto: url,
+      description: data.description,
+      eventName: data.eventName,
+      location: data.location,
+      eventDate: isoDate,
+      ticketType: data.ticketType,
+      ticketPrice: data.ticketPrice,
+      maxParticipants: 100,
+    });
+
+    console.log("Event created:", res);
   };
 
   const ticketType = watch("ticketType");
