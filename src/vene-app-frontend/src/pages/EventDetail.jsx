@@ -1,13 +1,30 @@
 import { Button } from "../components/ui/button";
-import { Calendar, MapPin } from "lucide-react";
+import {
+  Calendar,
+  CalendarPlus,
+  Loader2,
+  MapPin,
+  ScanQrCode,
+  Share,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getEvent } from "../services/EventService";
+import {
+  getEvent,
+  isRegisteredForEvent,
+  registerEvent,
+} from "../services/EventService";
 import { useParams } from "react-router";
+import { useAuth } from "../components/auth";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const EventDetail = () => {
   const params = useParams();
-  const eventId =
-    params.eventId.split("-")[params.eventId.split("-").length - 1];
+  const eventId = params.eventId.split("-").pop();
+  const { user } = useAuth();
+  const { toast } = useToast();
+
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const {
     data: event,
@@ -18,11 +35,11 @@ const EventDetail = () => {
     queryFn: () => getEvent(eventId),
   });
 
-  console.log("params", params);
-  console.log("id", eventId);
-  console.log("event", event);
-  console.log("error", error);
-  console.log("isloading", isLoading);
+  const { data: isRegistered, refetch } = useQuery({
+    enabled: Boolean(user && user?.key && eventId),
+    queryKey: ["isRegistered", user?.key, eventId],
+    queryFn: () => isRegisteredForEvent(eventId),
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -44,6 +61,28 @@ const EventDetail = () => {
     minute: "numeric",
   });
 
+  const register = async () => {
+    try {
+      setIsRegistering(true);
+      const res = await registerEvent(eventId);
+      console.log(res);
+      refetch();
+      toast({
+        title: "Success!",
+        description: "You have successfully registered for this event.",
+      });
+    } catch (error) {
+      console.error("Error registering for event:", error);
+      toast({
+        title: "Error",
+        description: "Failed to register for event. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRegistering(false);
+    }
+  };
+
   return (
     <div className="flex-grow container w-full m-auto p-4 py-12">
       <div className="mb-8">
@@ -52,7 +91,7 @@ const EventDetail = () => {
           <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
           <div>
             <p className="text-sm text-gray-600">Hosted by</p>
-            <p className="font-medium">Ahnaf Alfariza</p>
+            <p className="font-medium">{event.creator.toText()}</p>
           </div>
         </div>
       </div>
@@ -113,13 +152,41 @@ const EventDetail = () => {
                 </span>
               </div>
             </div>
-            <div>
-              <p className="font-bold mb-1">Registration</p>
-              <p className="text-sm mb-4">
-                Welcome! To join the event, please register below.
-              </p>
-              <Button className="w-full">Register</Button>
-            </div>
+            {isRegistered ? (
+              <div>
+                <p className="font-bold mb-1">You're in</p>
+                <p className="text-sm mb-4">
+                  Add to calendar and see your ticket below
+                </p>
+                <div className="flex gap-3">
+                  <Button className="grow">
+                    <ScanQrCode />
+                    My Ticket
+                  </Button>
+                  <Button variant="outline">
+                    <CalendarPlus />
+                  </Button>
+                  <Button variant="outline">
+                    <Share />
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <p className="font-bold mb-1">Registration</p>
+                <p className="text-sm mb-4">
+                  Welcome! To join the event, please register below.
+                </p>
+                <Button
+                  onClick={register}
+                  disabled={isRegistering}
+                  className="w-full"
+                >
+                  {isRegistering && <Loader2 />}
+                  Register
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
