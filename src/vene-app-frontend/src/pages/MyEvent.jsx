@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import QRCodeDialog from "../components/qrcode-dialog";
 import { generateCalendarLink } from "../utils/common";
+import EventDropdown from "../components/event-dropdown";
 
 const MyEvent = () => {
   const events = [
@@ -141,6 +142,7 @@ const MyEvent = () => {
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
+                <EventDropdown />
               </div>
             </div>
           ))}
