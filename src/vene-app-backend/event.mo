@@ -235,6 +235,32 @@ actor EventManagement {
       };
     };
   };
+
+  public query func getUserRegisteredEvents(userId : Principal) : async Result.Result<[Event], Text> {
+    var userEvents : [Event] = [];
+
+    for ((eventId, regs) in registrations.entries()) {
+      let userReg = Array.find<Registration>(
+        regs,
+        func(reg) { reg.userId == userId },
+      );
+
+      switch (userReg) {
+        case (null) {};
+        case (?reg) {
+          switch (events.get(eventId)) {
+            case (null) {};
+            case (?event) {
+              userEvents := Array.append(userEvents, [event]);
+            };
+          };
+        };
+      };
+    };
+
+    #ok(userEvents);
+  };
+
   public shared (msg) func approveRegistration(eventId : Text, userId : Principal) : async Result.Result<Bool, Text> {
     switch (events.get(eventId)) {
       case (null) { #err("Event not found") };
