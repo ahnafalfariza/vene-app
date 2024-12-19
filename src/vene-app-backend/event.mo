@@ -18,7 +18,6 @@ actor EventManagement {
     category : Text;
     coverPhoto : Text;
     eventDate : Time.Time;
-    eventTime : Text;
     ticketType : TicketType;
     ticketPrice : ?Float;
     maxParticipants : Nat;
@@ -81,7 +80,6 @@ actor EventManagement {
     category : Text,
     coverPhoto : Text,
     eventDate : Time.Time,
-    eventTime : Text,
     ticketType : TicketType,
     ticketPrice : ?Float,
     maxParticipants : Nat,
@@ -121,7 +119,6 @@ actor EventManagement {
         category = category;
         coverPhoto = coverPhoto;
         eventDate = eventDate;
-        eventTime = eventTime;
         ticketType = ticketType;
         ticketPrice = ticketPrice;
         maxParticipants = maxParticipants;
