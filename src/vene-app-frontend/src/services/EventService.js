@@ -29,7 +29,7 @@ export const createEvent = async ({
 
 export const registerEvent = async (eventId) => {
   const res = await vene_app_backend.registerForEvent(eventId);
-  return res;
+  return res.ok ? res : Promise.reject(new Error(res.err));
 };
 
 export const getEvents = async (skip = 0, limit = 10) => {

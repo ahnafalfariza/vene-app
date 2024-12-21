@@ -10,6 +10,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import {
   getEvent,
+  getEventParticipants,
   isRegisteredForEvent,
   registerEvent,
 } from "../services/EventService";
@@ -18,7 +19,7 @@ import { useAuth } from "../components/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import QRCodeDialog from "../components/qrcode-dialog";
-import { generateCalendarLink } from "../utils/common";
+import { generateAvatarImage, generateCalendarLink } from "../utils/common";
 
 const EventDetail = () => {
   const params = useParams();
@@ -42,6 +43,11 @@ const EventDetail = () => {
     enabled: Boolean(user && user?.key && eventId),
     queryKey: ["isRegistered", user?.key, eventId],
     queryFn: () => isRegisteredForEvent(eventId),
+  });
+
+  const { data: eventParticipant } = useQuery({
+    queryKey: ["eventParticipants", eventId],
+    queryFn: () => getEventParticipants(event.id),
   });
 
   if (isLoading) {
@@ -78,7 +84,8 @@ const EventDetail = () => {
       console.error("Error registering for event:", error);
       toast({
         title: "Error",
-        description: "Failed to register for event. Please try again.",
+        description:
+          error.message || "Failed to register for event. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -139,21 +146,27 @@ const EventDetail = () => {
               </div>
             </div>
             <div className="mb-6">
-              <div className="flex items-center">
-                <div className="flex -space-x-2">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-6 h-6 rounded-full border-2 border-white bg-gray-200"
-                    >
-                      {/* Avatar images would go here */}
-                    </div>
-                  ))}
+              {eventParticipant?.ok?.length > 0 && (
+                <div className="flex items-center">
+                  <div className="flex -space-x-2">
+                    {eventParticipant.ok.slice(0, 5).map((user, i) => (
+                      <div
+                        key={i}
+                        className="w-6 h-6 rounded-full border-2 border-white bg-gray-200"
+                      >
+                        <img
+                          src={generateAvatarImage(user.userId.toString())}
+                          alt="Avatar"
+                          className="w-full h-full rounded-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <span className="ml-2 text-sm text-gray-600">
+                    {eventParticipant.ok.length}+ attendees
+                  </span>
                 </div>
-                <span className="ml-2 text-sm text-gray-600">
-                  {10}+ attendees
-                </span>
-              </div>
+              )}
             </div>
             {isRegistered ? (
               <div>
