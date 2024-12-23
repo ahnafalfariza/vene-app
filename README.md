@@ -41,6 +41,15 @@ Vene is an event ticketing application developed on the Internet Computer Protoc
 - **Backend:** Motoko
 - **Database:** Juno
 
+## Workspace Structure
+
+```
+.
+├── src
+    ├── vene-app-frontend    # Vite React frontend
+    └── vene-app-backend     # Motoko Canister
+```
+
 ## Installation
 
 1. Clone the repository:
