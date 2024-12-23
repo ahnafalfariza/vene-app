@@ -3,6 +3,7 @@ import Category from "../components/category";
 import EventList from "../components/events";
 import LocalEvent from "../components/localevent";
 import { getEvents } from "../services/EventService";
+import { useParams, useSearchParams } from "react-router";
 
 const Home = () => {
   const {
@@ -13,6 +14,7 @@ const Home = () => {
     queryKey: ["events"],
     queryFn: () => getEvents(),
   });
+  const [searchParams] = useSearchParams();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -22,6 +24,13 @@ const Home = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  const eventListFiltered = eventList.events.filter((event) => {
+    if (searchParams.has("filter")) {
+      return event.category === searchParams.get("filter");
+    }
+    return true;
+  });
+
   return (
     <div className="flex-grow container w-full m-auto p-4 py-12">
       <Category />
@@ -29,7 +38,7 @@ const Home = () => {
         <h1 className="my-7 font-bold text-xl">Upcoming Event</h1>
         <p>See more</p>
       </div>
-      <EventList events={eventList.events} />
+      <EventList events={eventListFiltered} />
       <h1 className="my-7 font-bold text-xl">Explore Local Events</h1>
       <LocalEvent />
     </div>

@@ -40,10 +40,7 @@ const eventSchema = z.object({
       return ["image/jpeg", "image/png", "image/webp"].includes(file.type);
     }, "Please upload an image file (JPEG, PNG, or WebP)"),
   category: z.string().min(1, "Please select a category"),
-  description: z
-    .string()
-    .min(20, "Description must be at least 20 characters")
-    .max(1000, "Description must not exceed 1000 characters"),
+  description: z.string().min(20, "Description must be at least 20 characters"),
   eventName: z
     .string()
     .min(3, "Event name must be at least 3 characters")

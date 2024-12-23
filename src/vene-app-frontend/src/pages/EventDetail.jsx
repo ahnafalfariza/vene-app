@@ -45,10 +45,12 @@ const EventDetail = () => {
     queryFn: () => isRegisteredForEvent(eventId),
   });
 
-  const { data: eventParticipant } = useQuery({
-    queryKey: ["eventParticipants", eventId],
-    queryFn: () => getEventParticipants(event.id),
-  });
+  const { data: eventParticipant, refetch: refetchEventParticipant } = useQuery(
+    {
+      queryKey: ["eventParticipants", eventId],
+      queryFn: () => getEventParticipants(event.id),
+    }
+  );
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -76,6 +78,7 @@ const EventDetail = () => {
       const res = await registerEvent(eventId);
       console.log(res);
       refetch();
+      refetchEventParticipant();
       toast({
         title: "Success!",
         description: "You have successfully registered for this event.",
@@ -98,7 +101,12 @@ const EventDetail = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-4">{event.eventName}</h1>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+          <div className="w-10 h-10 bg-gray-200 rounded-full">
+            <img
+              src={generateAvatarImage(event.creator.toText())}
+              className="rounded-lg h-10 w-10 bg-slate-500 select-none cursor-pointer"
+            />
+          </div>
           <div>
             <p className="text-sm text-gray-600">Hosted by</p>
             <p className="font-medium">{event.creator.toText()}</p>
@@ -118,7 +126,9 @@ const EventDetail = () => {
         <div className="md:col-span-3">
           <section className="mb-8">
             <h2 className="text-xl font-bold mb-4">About the event</h2>
-            <p className="text-gray-700">{event.description}</p>
+            <p className="text-gray-700 whitespace-pre-line">
+              {event.description}
+            </p>
           </section>
 
           <section className="mb-8">
