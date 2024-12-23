@@ -264,13 +264,13 @@ actor EventManagement {
     };
   };
 
-  public query func getUserRegisteredEvents(userId : Principal) : async Result.Result<[Event], Text> {
+  public query (msg) func getUserRegisteredEvents() : async Result.Result<[Event], Text> {
     var userEvents : [Event] = [];
 
     for ((eventId, regs) in registrations.entries()) {
       let userReg = Array.find<Registration>(
         regs,
-        func(reg) { reg.userId == userId },
+        func(reg) { reg.userId == msg.caller },
       );
 
       switch (userReg) {

@@ -1,4 +1,4 @@
-import { User, LogOut, Ticket } from "lucide-react";
+import { User, LogOut, Ticket, Wallet, Coins } from "lucide-react";
 import { signOut } from "@junobuild/core"; // Add signOut import
 import { useAuth } from "./auth";
 import { generateAvatarImage } from "../utils/common";
@@ -10,9 +10,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router";
 import EditProfileDialog from "./edit-profile-dialog";
+import { Button } from "./ui/button";
 
 const UserDropdownMenu = () => {
   const { user } = useAuth();
@@ -27,7 +29,21 @@ const UserDropdownMenu = () => {
           />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56 left-0">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>My Account Balance</DropdownMenuLabel>
+          {/* <DropdownMenuSeparator /> */}
+          {/* <DropdownMenuLabel>Balance</DropdownMenuLabel> */}
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              59.78 ICP
+              <DropdownMenuShortcut className="flex gap-2">
+                <Button size="sm" variant="ghost">
+                  <Wallet />
+                  Withdraw
+                </Button>
+              </DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuGroup></DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <EditProfileDialog />

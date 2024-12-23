@@ -131,11 +131,6 @@ const EventDetail = () => {
               {event.description}
             </p>
           </section>
-
-          <section className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Agenda</h2>
-            <div className="space-y-3"></div>
-          </section>
         </div>
 
         <div className="space-y-6 col-span-2">
@@ -156,7 +151,7 @@ const EventDetail = () => {
                     <MapContainer
                       center={[-6.1944, 106.8229]}
                       zoom={13}
-                      className="h-full w-full"
+                      className="h-full w-full -z-0"
                       scrollWheelZoom={false}
                     >
                       <TileLayer

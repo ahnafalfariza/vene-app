@@ -54,3 +54,13 @@ export const isRegisteredForEvent = async (eventId) => {
   }
   return false;
 };
+
+export const getUserRegisterdEvents = async () => {
+  const res = await vene_app_backend.getUserRegisteredEvents();
+  return res;
+};
+
+export const approveRegistration = async (eventId, userId) => {
+  const res = await vene_app_backend.approveRegistration(eventId, userId);
+  return res;
+};

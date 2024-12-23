@@ -315,7 +315,7 @@ const CreateEvent = () => {
                   <MapContainer
                     center={[-6.1944, 106.8229]}
                     zoom={13}
-                    className="h-full w-full"
+                    className="h-full w-full -z-0"
                     scrollWheelZoom={false}
                   >
                     <TileLayer
