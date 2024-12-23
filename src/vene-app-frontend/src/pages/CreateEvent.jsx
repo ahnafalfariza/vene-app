@@ -30,6 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { formatEventUrl } from "../utils/common";
+import { MapContainer, TileLayer } from "react-leaflet";
 
 const eventSchema = z.object({
   coverPhoto: z
@@ -310,9 +311,18 @@ const CreateEvent = () => {
                     {errors.location.message}
                   </p>
                 )}
-                {/* Map placeholder */}
-                <div className="h-40 bg-muted rounded-lg mt-3">
-                  {/* Add your map component here */}
+                <div className="h-72 bg-muted rounded-lg mt-3">
+                  <MapContainer
+                    center={[-6.1944, 106.8229]}
+                    zoom={13}
+                    className="h-full w-full"
+                    scrollWheelZoom={false}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                  </MapContainer>
                 </div>
               </div>
 

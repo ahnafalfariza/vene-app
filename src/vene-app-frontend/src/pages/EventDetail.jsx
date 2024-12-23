@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import QRCodeDialog from "../components/qrcode-dialog";
 import { generateAvatarImage, generateCalendarLink } from "../utils/common";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const EventDetail = () => {
   const params = useParams();
@@ -151,7 +152,22 @@ const EventDetail = () => {
               <div className="w-full">
                 <p className="font-bold">{event.location}</p>
                 <div className="mt-2 rounded-lg overflow-hidden">
-                  <div className="bg-gray-200 w-full h-[200px]"></div>
+                  <div className="w-full h-[200px]">
+                    <MapContainer
+                      center={[-6.1944, 106.8229]}
+                      zoom={13}
+                      className="h-full w-full"
+                      scrollWheelZoom={false}
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={[-6.1944, 106.8229]}>
+                        <Popup>Event Location</Popup>
+                      </Marker>
+                    </MapContainer>
+                  </div>
                 </div>
               </div>
             </div>
