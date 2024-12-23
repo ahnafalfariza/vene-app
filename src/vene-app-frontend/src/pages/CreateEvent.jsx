@@ -33,13 +33,7 @@ import { formatEventUrl } from "../utils/common";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 const eventSchema = z.object({
-  coverPhoto: z
-    .instanceof(File)
-    .nullable()
-    .refine((file) => {
-      if (!file) return false;
-      return ["image/jpeg", "image/png", "image/webp"].includes(file.type);
-    }, "Please upload an image file (JPEG, PNG, or WebP)"),
+  coverPhoto: z.instanceof(File).nullable(),
   category: z.string().min(1, "Please select a category"),
   description: z.string().min(20, "Description must be at least 20 characters"),
   eventName: z

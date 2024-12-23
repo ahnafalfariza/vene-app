@@ -42,8 +42,8 @@ const HostedEvent = ({ events }) => {
     };
 
     return (
-      <div className="flex gap-4">
-        <div className="relative w-1/3">
+      <div className="flex gap-4 my-8">
+        <div className="relative w-1/5">
           <img
             src={event.coverPhoto}
             alt={event.eventName}
