@@ -3,7 +3,7 @@ import Category from "../components/category";
 import EventList from "../components/events";
 import LocalEvent from "../components/localevent";
 import { getEvents } from "../services/EventService";
-import { useParams, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 
 const Home = () => {
   const {
@@ -14,7 +14,7 @@ const Home = () => {
     queryKey: ["events"],
     queryFn: () => getEvents(),
   });
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -31,6 +31,23 @@ const Home = () => {
     return true;
   });
 
+  const EmptyState = () => (
+    <div className="text-center py-12">
+      <p className="text-gray-500">No events found</p>
+      {searchParams.has("filter") && (
+        <button
+          onClick={() => {
+            searchParams.delete("filter");
+            setSearchParams(searchParams);
+          }}
+          className="text-blue-500 hover:text-blue-700 mt-2"
+        >
+          Clear filter
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <div className="flex-grow container w-full m-auto p-4 py-12">
       <Category />
@@ -38,7 +55,11 @@ const Home = () => {
         <h1 className="my-7 font-bold text-xl">Upcoming Event</h1>
         <p>See more</p>
       </div>
-      <EventList events={eventListFiltered} />
+      {eventListFiltered.length > 0 ? (
+        <EventList events={eventListFiltered} />
+      ) : (
+        <EmptyState />
+      )}
       <h1 className="my-7 font-bold text-xl">Explore Local Events</h1>
       <LocalEvent />
     </div>
